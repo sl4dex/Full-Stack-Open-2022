@@ -2,13 +2,17 @@ const Header = (props) => {
   return <h1>{props.course}</h1>
 }
 
+const Part = (props) => {
+  return <p>{props.part} {props.ex}</p>
+}
+
 const Content = (props) => {
   console.log(props)
   return(
     <>
-      <p>{props.parts[0]} {props.exs[0]}</p>
-      <p>{props.parts[1]} {props.exs[1]}</p>
-      <p>{props.parts[2]} {props.exs[2]}</p>
+      <Part part={props.parts[0]} ex={props.exs[0]}/>
+      <Part part={props.parts[1]} ex={props.exs[1]}/>
+      <Part part={props.parts[2]} ex={props.exs[2]}/>
     </>
   )
 }
