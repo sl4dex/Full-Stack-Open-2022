@@ -7,6 +7,7 @@ const App = () => {
       id: 1}
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNum, setNewNum] = useState('')
 
   const addPerson = (event) =>{
     event.preventDefault()
@@ -18,15 +19,19 @@ const App = () => {
     }
     const newPerson = {
       name: newName,
-      id: persons.length + 1
+      id: persons.length + 1,
+      num: newNum
     }
     setPersons(persons.concat(newPerson))
     setNewName('')
+    setNewNum('')
   }
-
 
   const writingName = (event) => {
     setNewName(event.target.value)
+  }
+  const writingNum = (event) => {
+    setNewNum(event.target.value)
   }
 
   return (
@@ -37,11 +42,14 @@ const App = () => {
           name: <input value={newName} onChange={writingName}/>
         </div>
         <div>
+          number: <input value={newNum} onChange={writingNum}/>
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(p => <p key={p.id}>{p.name}</p>)}
+      {persons.map(p => <p key={p.id}>{p.name} {p.num}</p>)}
     </div>
   )
 }
