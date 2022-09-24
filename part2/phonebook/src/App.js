@@ -1,5 +1,28 @@
 import { useState } from 'react'
 
+const Button = ({type, text}) => <button type={type}>{text}</button>
+
+const PersonForm = ({methods, vars}) => {
+  const [addPerson, writingName, writingNum] = methods
+  const [newName, newNum] = vars
+  return(
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input value={newName} onChange={writingName}/>
+      </div>  
+      <div>
+        number: <input value={newNum} onChange={writingNum}/>
+      </div>
+      <div>
+        <Button type="submit" text="add" />
+      </div>
+    </form>
+  )
+}
+
+const PersonList = ({persons}) => persons.map(p => <p key={p.id}>{p.name} {p.num}</p>)
+
+
 const App = () => {
   const [persons, setPersons] = useState([
     { 
@@ -37,19 +60,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={writingName}/>
-        </div>
-        <div>
-          number: <input value={newNum} onChange={writingNum}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm methods={[addPerson, writingName, writingNum]} vars={[newName, newNum]}/>
       <h2>Numbers</h2>
-      {persons.map(p => <p key={p.id}>{p.name} {p.num}</p>)}
+      <PersonList persons={persons} />
     </div>
   )
 }
