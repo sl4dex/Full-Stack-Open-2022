@@ -48,7 +48,17 @@ const App = () => {
     event.preventDefault()
     for (let key in persons) {
       if (persons[key].name === newName) {
-        alert(`"${newName}" is already added to phonebook`)
+        if(window.confirm(`"${newName}" is already added to phonebook, replace the old number with a new one?`)) {
+          // find person in list where name == input value
+          const person = persons.find(p => p.name === persons[key].name)
+          // create new identical object copy except new number 
+          const changedNumber = {...person, num: newNum}
+          // send it with put
+          axios.put(`http://localhost:3001/persons/${person.id}`, changedNumber)
+            // Now to reflect the hanges in the DOM we do an exact copy of the persons list
+            // except on the item having the duplicate name, on that one we change the number to the new one
+            .then(response => setPersons(persons.map(p => p.num == person.num ? response.data : p)))
+        }
         return
       }
     }
