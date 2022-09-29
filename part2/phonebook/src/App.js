@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Button = ({type, text}) => <button type={type}>{text}</button>
 
@@ -20,17 +21,22 @@ const PersonForm = ({methods, vars}) => {
   )
 }
 
-const PersonList = ({persons}) => persons.map(p => <p key={p.id}>{p.name} {p.num}</p>)
+const PersonList = ({persons}) => persons.map(p => <p key={p.id}>{p.name} {p.number}</p>)
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { 
-      name: 'Arto Hellas',
-      id: 1}
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const addPerson = (event) =>{
     event.preventDefault()
