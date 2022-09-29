@@ -30,11 +30,34 @@ const PersonList = ({persons, setPersons}) => persons.map(  p => <p key={p.id}>{
   }
 }}>delete</button></p>)
 
+const Notification = ({message}) => {
+  if(!message)
+    return null
+  
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
+const Error = ({message}) => {
+  if(!message)
+    return null
+  
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
+  const [notif, setnotif] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
 
   useEffect(() => {
     axios
@@ -57,7 +80,19 @@ const App = () => {
           axios.put(`http://localhost:3001/persons/${person.id}`, changedNumber)
             // Now to reflect the hanges in the DOM we do an exact copy of the persons list
             // except on the item having the duplicate name, on that one we change the number to the new one
-            .then(response => setPersons(persons.map(p => p.num == person.num ? response.data : p)))
+            .then(response => {
+              setPersons(persons.map(p => p.num === person.num ? response.data : p))
+              setnotif(`Added "${newName}"`)
+              setTimeout(() => {
+                setnotif(null)
+              }, 5000)
+            })
+            .catch(error => {
+              setErrorMsg(`Information of "${person.name}" already removed from server`)
+              setTimeout(() => {
+                setErrorMsg(null)
+              }, 5000)
+            })
         }
         return
       }
@@ -74,6 +109,10 @@ const App = () => {
         setNewName('')
         setNewNum('')
       })
+    setnotif(`Added "${newName}"`)
+    setTimeout(() => {
+      setnotif(null)
+    }, 5000)
   }
 
   const writingName = (event) => {
@@ -85,6 +124,8 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notif} />
+      <Error message={errorMsg} />
       <h2>Phonebook</h2>
       <PersonForm methods={[addPerson, writingName, writingNum]} vars={[newName, newNum]}/>
       <h2>Numbers</h2>
