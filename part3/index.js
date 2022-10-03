@@ -39,6 +39,32 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).end()
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(elem => elem.id !== id)
+
+    response.status(204).end()
+})
+
+// very important so express can use json parser for POST
+app.use(express.json())
+
+app.post('/api/persons', (request, response) => {
+  const person = request.body
+  if (!person.name || !person.num)
+    return response.status(400).json({
+      error: 'no name and/or number' 
+    })
+  if (persons.filter(elem => elem.num === person.num).length > 0)
+    return response.status(400).json({
+      error: 'person with that num already exists'
+    })
+  person.id = Math.floor(Math.random() * 100000)
+  persons = persons.concat(person)
+
+  response.json(person)
+})
+
 app.get('/api/info', (request, response) => {
     var currentTime = new Date();
     response.send(`<p>phonebook has info for ${persons.length} people</p> ${currentTime}`)
