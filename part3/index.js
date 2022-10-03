@@ -1,5 +1,9 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
+
+// very important so express can use json parser for POST
+app.use(express.json())
 
 let persons = [
     {
@@ -18,6 +22,9 @@ let persons = [
         "id": 6
       }
 ]
+
+// middleware that logs rquest and response info
+app.use(morgan(':method :url :status :http-version :response-time '))
 
 app.get('/', (request, response) => {
     // we use .send because its a string
@@ -45,9 +52,6 @@ app.delete('/api/persons/:id', (request, response) => {
 
     response.status(204).end()
 })
-
-// very important so express can use json parser for POST
-app.use(express.json())
 
 app.post('/api/persons', (request, response) => {
   const person = request.body
