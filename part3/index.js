@@ -1,9 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
+
 const app = express()
 
 // very important so express can use json parser for POST
 app.use(express.json())
+
+app.use(cors())
+
 
 let persons = [
     {
