@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-  })
+  title: String,
+  author: String,
+  url: String,
+  likes: Number
+})
   
 // pasar _id a id, luego borrar _id y __v
 blogSchema.set('toJSON', {
@@ -16,4 +16,4 @@ blogSchema.set('toJSON', {
   }
 })  
 
-  module.exports = mongoose.model('Blog', blogSchema)
+module.exports = mongoose.model('Blog', blogSchema)
