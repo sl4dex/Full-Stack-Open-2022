@@ -15,9 +15,6 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-
-
-
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -44,7 +41,7 @@ describe('blog post gets created succesfully', () => {
     title: 'async/await es god',
     author: 'anonimo',
     url: 'https://abc',
-    likes: 0
+    // note that there is no likes field
   }
   
   test('length + 1', async () => {
@@ -55,9 +52,9 @@ describe('blog post gets created succesfully', () => {
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
-    console.log(response.body.length);
     expect(response.body).toHaveLength(helper.myList.length + 1)
   })
+
   test('new title in blogs list', async () => {
     await api
       .post('/api/blogs')
@@ -68,6 +65,41 @@ describe('blog post gets created succesfully', () => {
     const response = await api.get('/api/blogs')
     const blogsTitles = response.body.map(r => r.title)
     expect(blogsTitles).toContain('async/await es god')
+  })
+
+  test('new blog has likes: 0 by default', async () => {
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+
+    expect(response.body.likes).toBe(0)
+  })
+
+  
+  test('if blog has no title, return 400', async () => {
+    const newBlog2 = {
+      // no title
+      author: 'anonimo',
+      url: 'https://abc',
+      likes: 2
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog2)
+      .expect(400)
+  })
+  test('if blog has no url, return 400', async () => {
+    const newBlog3 = {
+      title: 'async/await es god',
+      author: 'anonimo',
+      // no url
+      likes: 2
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog3)
+      .expect(400)
   })
 })
 
