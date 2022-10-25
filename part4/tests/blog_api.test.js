@@ -7,6 +7,8 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
+// before each test, deletes all blogs from test db and saves them
+// again one by one to have a fresh state
 beforeEach(async () => {
   await Blog.deleteMany({})
   
@@ -99,6 +101,44 @@ describe('blog post gets created succesfully', () => {
     await api
       .post('/api/blogs')
       .send(newBlog3)
+      .expect(400)
+  })
+})
+
+describe('.delete blog by id', () => {
+  test('check new length === length - 1', async () => {
+    const response1 = await api.get('/api/blogs')
+    const ides = response1.body.map(b => b.id)
+    await api.delete(`/api/blogs/${ides[0]}`)
+      .expect(204)
+    const response2 = await api.get('/api/blogs')
+    expect(response2.body).toHaveLength(response1.body.length - 1)
+  })
+
+  test('if no matching id, response is 400', () => {
+    api.delete('/api/blogs/thisIdDoesntExist')
+      .expect(400)
+  })
+
+})
+
+describe('update blog by id (.put)', () => {
+  const updatedBlog = {
+    title: 'La IA nos asesina',
+    author: 'sl4dex',
+    url: 'https://abc',
+    likes: 0
+  }
+  test('title is updated', async () => {
+    const response1 = await api.get('/api/blogs')
+    const response2 = await api.put(`/api/blogs/${response1.body[0].id}`)
+      .send(updatedBlog)
+      .expect(200)
+    expect(response2.body.title).toBe('La IA nos asesina')
+  })
+  test('if no matching id, response is 400', () => {
+    api.put('/api/blogs/thisIdDoesntExist')
+      .send(updatedBlog)
       .expect(400)
   })
 })
