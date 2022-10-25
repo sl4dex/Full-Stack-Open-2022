@@ -4,13 +4,23 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 // como ya pusimos /api/blogs como prefijo en app.js, no hace falta ponerlo
-blogRouter.get('/', (request, response, next) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-    .catch(error => next(error))
+blogRouter.get('/', async (request, response, next) => {
+  // previous code using promises
+  // Blog
+  //   .find({})
+  //   .then(blogs => {
+  //     response.json(blogs)
+  //   })
+  //   .catch(error => next(error))
+
+  // now much cleaner with async await
+  try{
+    const blogs = await Blog.find({})
+    response.json(blogs)
+  }
+  catch (exception) {
+    next(exception)
+  }
 })
   
 blogRouter.post('/', (request, response, next) => {

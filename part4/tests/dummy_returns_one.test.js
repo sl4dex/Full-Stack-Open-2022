@@ -72,3 +72,7 @@ test('author with most likes', () => {
   const result = listHelper.mostLikes(myList)
   expect(result.likes).toEqual(10)
 })
+
+module.exports = {
+  myList
+}
