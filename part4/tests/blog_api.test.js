@@ -22,7 +22,7 @@ test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
-    .expect('Content-Type', /json/)
+    .expect('Content-Type', /application\/json/)
   
 })
 
@@ -31,6 +31,44 @@ test('correct amount of blogs', async () => {
     .get('/api/blogs')
   
   expect(response.body.length).toBe(5)
+})
+
+test('blogs contain id field', async() => {
+  const response = await api.get('/api/blogs')
+  // checks that id property exists for all blogs
+  response.body.forEach(blog => expect(blog.id).toBeDefined())
+})
+
+describe('blog post gets created succesfully', () => {
+  const newBlog = {
+    title: 'async/await es god',
+    author: 'anonimo',
+    url: 'https://abc',
+    likes: 0
+  }
+  
+  test('length + 1', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    console.log(response.body.length);
+    expect(response.body).toHaveLength(helper.myList.length + 1)
+  })
+  test('new title in blogs list', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const blogsTitles = response.body.map(r => r.title)
+    expect(blogsTitles).toContain('async/await es god')
+  })
 })
 
 afterAll( () => {

@@ -23,15 +23,27 @@ blogRouter.get('/', async (request, response, next) => {
   }
 })
   
-blogRouter.post('/', (request, response, next) => {
+blogRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
   
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-    .catch(error => next(error))
+  // old code with promises
+  // blog
+  //   .save()
+  //   .then(result => {
+  //     response.status(201).json(result)
+  //   })
+  //   .catch(error => next(error))
+
+  // now much cleaner with async await
+  try{
+    const b = await blog.save()
+    response.status(201).json(b)
+  }
+  catch (exception) {
+    next(exception)
+  }
+  
+
 })
 
 module.exports = blogRouter
