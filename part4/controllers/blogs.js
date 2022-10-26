@@ -2,6 +2,7 @@
 const blogRouter = require('express').Router()
 // pedir el schema de Blog
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 // como ya pusimos /api/blogs como prefijo en app.js, no hace falta ponerlo
 blogRouter.get('/', async (request, response, next) => {
@@ -15,7 +16,7 @@ blogRouter.get('/', async (request, response, next) => {
 
   // now much cleaner with async await
   try{
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('user')
     response.json(blogs)
   }
   catch (exception) {
@@ -35,8 +36,11 @@ blogRouter.post('/', async (request, response, next) => {
   //   .catch(error => next(error))
 
   // now much cleaner with async await
+
+  const user = blog.user = await User.findOne()
   try{
     const b = await blog.save()
+    user.blogs = user.blogs.concat(b.id)
     response.status(201).json(b)
   }
   catch (exception) {

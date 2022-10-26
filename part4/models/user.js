@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   username: {type: String, required: true, unique: true, minlength: 3},
   name: String,
   passwordHash: String,
-  notes: [
+  blogs: [
     {
     // mongo doesnt know that that this references blogs, its on mongoose to do that
       type: mongoose.Schema.Types.ObjectId,
