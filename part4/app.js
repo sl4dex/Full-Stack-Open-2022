@@ -11,6 +11,7 @@ const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 // pedir el router de blogs
 const blogRouter = require('./controllers/blogs')
+const userRouter = require('./controllers/users')
 
 // conexion a la db
 logger.info('connecting to mongodb')
@@ -22,6 +23,8 @@ app.use(express.json())
 
 // usar el router con las rutas de blog
 app.use('/api/blogs', blogRouter)
+
+app.use('/api/users', userRouter)
 
 // usar middleware para las rutas
 app.use(middleware.unknownEndpoint)
