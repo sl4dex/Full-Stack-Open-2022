@@ -21,6 +21,8 @@ mongoose.connect(config.MONGODB_URI)
 app.use(cors())
 app.use(express.json())
 
+app.use(middleware.tokenExtractor)
+
 // usar el router con las rutas de blog
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
@@ -29,5 +31,7 @@ app.use('/api/login', loginRouter)
 // usar middleware para las rutas
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+app.use(middleware.requestLogger)
+
 
 module.exports = app
