@@ -1,15 +1,23 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const helper = require('./dummy_returns_one.test')
+const helper = require('./test_helper')
 
 const api = supertest(app)
 
 const Blog = require('../models/blog')
 
+let loginResponse
 // before each test, deletes all blogs from test db and saves them
 // again one by one to have a fresh state
 beforeEach(async () => {
+  // delete all users and add root
+  await helper.deleteCreateUsers()
+  //then login root to get the token
+  loginResponse = await api
+    .post('/api/login')
+    .send({username: 'root', password: 'myPassword'})
+
   await Blog.deleteMany({})
   
   const copiedBlogs = helper.myList.map(blog => new Blog(blog))
@@ -22,23 +30,21 @@ test('blogs are returned as json', async () => {
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
-  
 })
-
 test('correct amount of blogs', async () => {
   const response = await api
     .get('/api/blogs')
   
   expect(response.body.length).toBe(5)
 })
-
 test('blogs contain id field', async() => {
   const response = await api.get('/api/blogs')
   // checks that id property exists for all blogs
   response.body.forEach(blog => expect(blog.id).toBeDefined())
 })
 
-describe('blog post gets created succesfully', () => {
+
+describe('POST new blog', () => {
   const newBlog = {
     title: 'async/await es god',
     author: 'anonimo',
@@ -50,6 +56,7 @@ describe('blog post gets created succesfully', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -61,6 +68,7 @@ describe('blog post gets created succesfully', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -73,12 +81,12 @@ describe('blog post gets created succesfully', () => {
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(201)
 
     expect(response.body.likes).toBe(0)
   })
 
-  
   test('if blog has no title, return 400', async () => {
     const newBlog2 = {
       // no title
@@ -89,6 +97,7 @@ describe('blog post gets created succesfully', () => {
     await api
       .post('/api/blogs')
       .send(newBlog2)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(400)
   })
   test('if blog has no url, return 400', async () => {
@@ -101,15 +110,30 @@ describe('blog post gets created succesfully', () => {
     await api
       .post('/api/blogs')
       .send(newBlog3)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(400)
   })
 })
 
 describe('.delete blog by id', () => {
+  const newBlog = {
+    title: 'async/await es god',
+    author: 'anonimo',
+    url: 'https://abc',
+    likes: 3
+  }
   test('check new length === length - 1', async () => {
+    const createdBlog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
     const response1 = await api.get('/api/blogs')
-    const ides = response1.body.map(b => b.id)
-    await api.delete(`/api/blogs/${ides[0]}`)
+    await api
+      .delete(`/api/blogs/${createdBlog.body.id}`)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(204)
     const response2 = await api.get('/api/blogs')
     expect(response2.body).toHaveLength(response1.body.length - 1)
