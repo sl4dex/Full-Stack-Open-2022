@@ -1,4 +1,3 @@
-
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -12,6 +11,7 @@ const middleware = require('./utils/middleware')
 // pedir el router de blogs
 const blogRouter = require('./controllers/blogs')
 const userRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 
 // conexion a la db
 logger.info('connecting to mongodb')
@@ -23,8 +23,8 @@ app.use(express.json())
 
 // usar el router con las rutas de blog
 app.use('/api/blogs', blogRouter)
-
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 // usar middleware para las rutas
 app.use(middleware.unknownEndpoint)

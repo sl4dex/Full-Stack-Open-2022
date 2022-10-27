@@ -3,18 +3,19 @@ const blogRouter = require('express').Router()
 // pedir el schema de Blog
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+// gets the Authorization header from the request and checks for Bearer scheme
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 // como ya pusimos /api/blogs como prefijo en app.js, no hace falta ponerlo
 blogRouter.get('/', async (request, response, next) => {
-  // previous code using promises
-  // Blog
-  //   .find({})
-  //   .then(blogs => {
-  //     response.json(blogs)
-  //   })
-  //   .catch(error => next(error))
-
-  // now much cleaner with async await
   try{
     const blogs = await Blog.find({}).populate('user')
     response.json(blogs)
@@ -25,20 +26,19 @@ blogRouter.get('/', async (request, response, next) => {
 })
   
 blogRouter.post('/', async (request, response, next) => {
-  const blog = new Blog(request.body)
-  
-  // old code with promises
-  // blog
-  //   .save()
-  //   .then(result => {
-  //     response.status(201).json(result)
-  //   })
-  //   .catch(error => next(error))
-
-  // now much cleaner with async await
-
-  const user = blog.user = await User.findOne()
   try{
+    const token = getTokenFrom(request)
+    // decodes token using internal SECRET string
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    // jwt.verify verifies the token, and aso returns the decoded token,
+    // as you remember it is a dictionary containing the username and the internal _id
+    if (!token || !decodedToken.id)
+      return response.status(401).json({ error: 'token missing or invalid' })
+    
+    const blog = new Blog(request.body)
+    // sets user creator as the one with the id of the decoed token
+    const user = blog.user = await User.findById(decodedToken.id)
+  
     const b = await blog.save()
     user.blogs = user.blogs.concat(b.id)
     response.status(201).json(b)
