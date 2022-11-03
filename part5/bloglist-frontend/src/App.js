@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login' 
+import LoginForm from './components/LoginForm' 
+import BlogForm from './components/BlogForm' 
 
 const Notification = ({message}) => {
   if(!message)
@@ -76,63 +78,22 @@ const App = () => {
       }, 5000)
     }
   }
-  // html del formulario
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-        <div>
-          username 
-            <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password 
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-  )
-  const writingTitle = event => setNewTitle(event.target.value)
-  const writingAuthor = event => setNewAuthor(event.target.value)
-  const writingUrl = event => setNewUrl(event.target.value)
 
-  const blogForm = () => (
-    <form onSubmit={() => blogService.create({title: newTitle, author: newAuthor, url: newUrl})}>
-      <h2> New blog</h2>
-      <div>
-        title <input value={newTitle} onChange={writingTitle} />
-      </div>
-      <div>
-        author <input value={newAuthor} onChange={writingAuthor} />
-      </div>
-      <div>
-        url <input value={newUrl} onChange={writingUrl} />
-      </div>
-        <button type="submit">post</button>
-    </form>
-  )
   function logOut() {
     window.localStorage.clear()
     window.location.reload()
   }
+  
   return (
     <div>
       <Notification message={noti} />
       <Error message={errorMessage} />
 
       {user === null ?
-      loginForm() :
+      <LoginForm handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username}  password={password} /> :
       <div>
         <p>{user.name} logged-in <button onClick={logOut}>logout</button></p>
-        {blogForm()}
+        <BlogForm setNewTitle={setNewTitle} setNewAuthor={setNewAuthor} setNewUrl={setNewUrl} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl}/>
       </div>
       }
 

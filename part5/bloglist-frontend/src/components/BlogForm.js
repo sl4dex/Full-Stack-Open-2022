@@ -1,0 +1,43 @@
+import  {React, useState} from 'react'
+import blogService from '../services/blogs'
+
+
+const BlogForm = ({setNewTitle, setNewAuthor, setNewUrl, newTitle, newAuthor, newUrl}) => {
+    const [blogformVisible, setblogformVisible] = useState(false)
+    const hideWhenVisible = { display: blogformVisible ? 'none' : '' }
+    const showWhenVisible = { display: blogformVisible ? '' : 'none' }
+
+    const writingTitle = event => setNewTitle(event.target.value)
+    const writingAuthor = event => setNewAuthor(event.target.value)
+    const writingUrl = event => setNewUrl(event.target.value)
+    
+    function addblog(){
+        blogService.create({title: newTitle, author: newAuthor, url: newUrl})
+        setblogformVisible(false)
+    }
+    return(
+        <>
+        <div style={hideWhenVisible}>
+            <button onClick={() => setblogformVisible(true)}>new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+            <form onSubmit={addblog}>
+                <h2> New blog</h2>
+                <div>
+                title <input value={newTitle} onChange={writingTitle} />
+                </div>
+                <div>
+                author <input value={newAuthor} onChange={writingAuthor} />
+                </div>
+                <div>
+                url <input value={newUrl} onChange={writingUrl} />
+                </div>
+                <button type="submit">post</button>
+            </form>
+            <button onClick={() => setblogformVisible(false)}>cancel</button>
+        </div>
+        </> 
+    )
+}
+
+export default BlogForm
