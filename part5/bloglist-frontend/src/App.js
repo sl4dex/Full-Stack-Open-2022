@@ -98,13 +98,8 @@ const App = () => {
       }
 
       <h2>Blogs</h2>
-      {blogs.map(blog => 
-        <ul key={blog.id}>
-          <li>{blog.title}</li>
-          <li>{blog.author}</li>
-          <li>{blog.url}</li>
-          <li>{blog.likes}</li>
-        </ul>)}
+      {/* for all elements of array, if b has more likes than a, then b is sorted before a and viceversa */}
+      {blogs.sort((a, b) => b.likes - a.likes).map(blog => <Blog key={blog.id} blog={blog} />)}
     </div>
 )
 }
