@@ -99,7 +99,7 @@ const App = () => {
 
       <h2>Blogs</h2>
       {/* for all elements of array, if b has more likes than a, then b is sorted before a and viceversa */}
-      {blogs.sort((a, b) => b.likes - a.likes).map(blog => <Blog key={blog.id} blog={blog} />)}
+      {blogs.sort((a, b) => b.likes - a.likes).map(blog => <Blog key={blog.id} blog={blog} user={user} blogs={blogs} setBlogs={setBlogs}/>)}
     </div>
 )
 }

@@ -43,12 +43,11 @@ blogRouter.delete('/:id', async (request, response, next) => {
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     if (!request.token|| !decodedToken.id)
       return response.status(401).json({ error: 'token missing or invalid' })
-    
     const blog = await Blog.findById(request.params.id)
     if(decodedToken.id != blog.user.toString())
       return response.status(401).json({ error: 'you are not the blog creator' })
 
-    await Blog.deleteOne({id : blog.id})
+    await Blog.deleteOne({_id : blog.id})
     response.status(204).end()
   } catch (exception) {
     next(exception)
