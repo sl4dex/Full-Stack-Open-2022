@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login' 
-import LoginForm from './components/LoginForm' 
-import BlogForm from './components/BlogForm' 
+import loginService from './services/login'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   if(!message)
     return null
-  
+
   return (
     <div className='success'>
       {message}
     </div>
   )
 }
-const Error = ({message}) => {
+const Error = ({ message }) => {
   if(!message)
     return null
-  
+
   return (
     <div className='error'>
       {message}
@@ -33,7 +33,7 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('')
   const [noti, setNoti] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
@@ -42,7 +42,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -58,7 +58,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService
-        .login({username, password})
+        .login({ username, password })
       // user is the response from login
       setUser(user)
       setUsername('')
@@ -66,11 +66,11 @@ const App = () => {
       blogService.setToken(user.token)
       window.localStorage.setItem(
         'loggedBlogUser', JSON.stringify(user)
-      ) 
+      )
       setNoti('Login successful')
       setTimeout(() => {
         setNoti(null)
-      }, 5000) 
+      }, 5000)
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -83,25 +83,25 @@ const App = () => {
     window.localStorage.clear()
     window.location.reload()
   }
-  
+
   return (
     <div>
       <Notification message={noti} />
       <Error message={errorMessage} />
 
       {user === null ?
-      <LoginForm handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username}  password={password} /> :
-      <div>
-        <p>{user.name} logged-in <button onClick={logOut}>logout</button></p>
-        <BlogForm setNewTitle={setNewTitle} setNewAuthor={setNewAuthor} setNewUrl={setNewUrl} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl}/>
-      </div>
+        <LoginForm handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} username={username}  password={password} /> :
+        <div>
+          <p>{user.name} logged-in <button onClick={logOut}>logout</button></p>
+          <BlogForm setNewTitle={setNewTitle} setNewAuthor={setNewAuthor} setNewUrl={setNewUrl} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl}/>
+        </div>
       }
 
       <h2>Blogs</h2>
       {/* for all elements of array, if b has more likes than a, then b is sorted before a and viceversa */}
       {blogs.sort((a, b) => b.likes - a.likes).map(blog => <Blog key={blog.id} blog={blog} user={user} blogs={blogs} setBlogs={setBlogs}/>)}
     </div>
-)
+  )
 }
 
 export default App
