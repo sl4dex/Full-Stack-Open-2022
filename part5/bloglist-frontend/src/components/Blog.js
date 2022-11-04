@@ -27,9 +27,9 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
   }
   return (
     <div style={blogStyle}>
-      {blog.title} by {blog.author}
+      <div className='initial'>{blog.title} by {blog.author}</div>
       <Togglable buttonLabel='view'>
-        <div>
+        <div className='more-details'>
           {blog.url} <br />
         likes: {likes} <button onClick={ () => updateBlog({ blog })}>like</button><br />
           {blog.user.username} <br />
