@@ -22,15 +22,15 @@ const BlogForm = ({ setNewTitle, setNewAuthor, setNewUrl, newTitle, newAuthor, n
       </div>
       <div style={showWhenVisible}>
         <form onSubmit={addblog}>
-          <h2> New blog</h2>
+          <h2>New blog</h2>
           <div>
-        title <input value={newTitle} onChange={writingTitle} />
+        title <input id='title' value={newTitle} onChange={writingTitle} />
           </div>
           <div>
-        author <input value={newAuthor} onChange={writingAuthor} />
+        author <input id='author' value={newAuthor} onChange={writingAuthor} />
           </div>
           <div>
-        url <input value={newUrl} onChange={writingUrl} />
+        url <input id='url' value={newUrl} onChange={writingUrl} />
           </div>
           <button type="submit">post</button>
         </form>
