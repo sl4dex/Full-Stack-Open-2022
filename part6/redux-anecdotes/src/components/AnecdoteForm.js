@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createActionAnecdote } from '../reducers/anecdoteReducer'
+import { whenCreating } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () =>{
     const dispatch = useDispatch()
@@ -10,6 +11,7 @@ const AnecdoteForm = () =>{
         const saying = event.target.anecdote.value
         event.target.anecdote.value = ''
         dispatch(createActionAnecdote(saying))
+        dispatch(whenCreating(saying))
     }
     return (
     <>

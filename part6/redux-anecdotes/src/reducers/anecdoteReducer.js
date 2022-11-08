@@ -38,7 +38,6 @@ const asObject = (anecdote) => {
 // }
 
 const initialState = anecdotesAtStart.map(asObject)
-
 // name, initial-state, reducers
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
