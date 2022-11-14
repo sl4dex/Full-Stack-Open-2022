@@ -16,11 +16,8 @@ const AnecdoteList = () => {
                     <div>
                         has {anecdote.votes}
                         <button onClick={() => {
-                            dispatch(createActionVote(anecdote.id))
-                            dispatch(whenVoting(anecdote.content))
-                            setTimeout(function(){
-                                dispatch(removeNoti(anecdote))
-                            }, 3000)
+                            dispatch(createActionVote(anecdote.id, anecdote.content, anecdote.votes))
+                            dispatch(whenVoting(`you voted "${anecdote.content}"`, 3000))
                             }}>vote</button>
                     </div>
                 </div>

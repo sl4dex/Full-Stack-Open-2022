@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createActionAnecdote } from '../reducers/anecdoteReducer'
 import { whenCreating } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () =>{
     const dispatch = useDispatch()
@@ -12,7 +11,7 @@ const AnecdoteForm = () =>{
         const saying = event.target.anecdote.value
         dispatch(createActionAnecdote(saying))
         event.target.anecdote.value = ''
-        dispatch(whenCreating(saying))
+        dispatch(whenCreating(`you created "${saying}"`, 3000))
     }
     return (
     <>
