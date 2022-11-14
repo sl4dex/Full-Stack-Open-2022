@@ -12,19 +12,17 @@ const AnecdoteList = () => {
         <>
             {anecdotesSorted.map(anecdote =>
                 <div key={anecdote.id}>
-                <div>
-                    {anecdote.content}
-                </div>
-                <div>
-                    has {anecdote.votes}
-                    <button onClick={() => {
-                        dispatch(createActionVote(anecdote.id))
-                        dispatch(whenVoting(anecdote.content))
-                        setTimeout(function(){
-                            dispatch(removeNoti(anecdote))
-                        }, 3000)
-                        }}>vote</button>
-                </div>
+                    <div>{anecdote.content}</div>
+                    <div>
+                        has {anecdote.votes}
+                        <button onClick={() => {
+                            dispatch(createActionVote(anecdote.id))
+                            dispatch(whenVoting(anecdote.content))
+                            setTimeout(function(){
+                                dispatch(removeNoti(anecdote))
+                            }, 3000)
+                            }}>vote</button>
+                    </div>
                 </div>
             )}
         </>

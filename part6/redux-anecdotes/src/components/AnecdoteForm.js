@@ -10,9 +10,8 @@ const AnecdoteForm = () =>{
     const addAnecdote = async (event) => {
         event.preventDefault()
         const saying = event.target.anecdote.value
+        dispatch(createActionAnecdote(saying))
         event.target.anecdote.value = ''
-        const newAnecdote = await anecdoteService.createNew(saying)
-        dispatch(createActionAnecdote(newAnecdote))
         dispatch(whenCreating(saying))
     }
     return (
