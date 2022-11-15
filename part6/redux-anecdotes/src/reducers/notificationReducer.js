@@ -22,18 +22,26 @@ const notificationSlice = createSlice({
 })
 
 export const {notiVote, notiCreate, removeNoti } = notificationSlice.actions
+// global scope to check if there was a previous notification timeout
+let ideVote
 export const whenVoting = (content, time) => {
+    console.log(ideVote);
+    if (ideVote)
+        clearTimeout(ideVote)
     return async dispatch => {
         dispatch(notiVote(content))
-        setTimeout(function(){
+        ideVote = setTimeout(function(){
             dispatch(removeNoti())
         }, time)
     }
 }
+let ideCreate
 export const whenCreating = (content, time) => {
+    if (ideCreate)
+        clearTimeout(ideCreate)
     return async dispatch => {
         dispatch(notiCreate(content))
-        setTimeout(function(){
+        ideCreate = setTimeout(function(){
             dispatch(removeNoti())
         }, time)
     }

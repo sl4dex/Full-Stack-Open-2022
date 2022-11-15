@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 
-const Notification = () => {
-  // useSelector muestra el estado de lo que quieras del store
-  const notification = useSelector(state => state.notification.value)
-  const mystyle = useSelector(state => state.notification.style)
-
+const Notification = (props) => {
+  // you can use props to reflect the state thanks to the connect function and mapStateToProps
+  const notification = props.notification.value
+  const mystyle = props.notification.style
+  
   return (
     <div style={mystyle}>
       {notification}
@@ -12,4 +12,11 @@ const Notification = () => {
   )
 }
 
-export default Notification
+// takes the state from the store as a parameter and maps it to props (old alternative to useSelector)
+const mapStateToProps = (state) => {
+  return {
+    notification: state.notification
+  }
+}
+const ConnectedNotification = connect(mapStateToProps)(Notification)
+export default ConnectedNotification

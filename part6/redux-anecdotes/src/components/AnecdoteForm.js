@@ -1,17 +1,15 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { createActionAnecdote } from '../reducers/anecdoteReducer'
 import { whenCreating } from '../reducers/notificationReducer'
 
-const AnecdoteForm = () =>{
-    const dispatch = useDispatch()
-
+const AnecdoteForm = (props) =>{
     const addAnecdote = async (event) => {
         event.preventDefault()
         const saying = event.target.anecdote.value
-        dispatch(createActionAnecdote(saying))
+        props.createActionAnecdote(saying)
         event.target.anecdote.value = ''
-        dispatch(whenCreating(`you created "${saying}"`, 3000))
+        props.whenCreating(`you created "${saying}"`, 3000)
     }
     return (
     <>
@@ -24,4 +22,10 @@ const AnecdoteForm = () =>{
     )
 }
 
-export default AnecdoteForm
+// takes the action creator functions from the store as a parameter and maps it to props (old alternative to useDispatch)
+const mapDispatchToProps = {
+    createActionAnecdote,
+    whenCreating
+}
+const ConnectedAnecdoteForm = connect(null, mapDispatchToProps)(AnecdoteForm)
+export default ConnectedAnecdoteForm
