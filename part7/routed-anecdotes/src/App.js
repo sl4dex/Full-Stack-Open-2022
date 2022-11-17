@@ -85,12 +85,12 @@ const CreateNew = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content: content.value,
-      author: author.value,
-      info: info.value,
+      content: content.noReset.value,
+      author: author.noReset.value,
+      info: info.noReset.value,
       votes: 0
     })
-    props.setNotification(`a new anecdote "${content.value}" created!`)
+    props.setNotification(`a new anecdote "${content.noReset.value}" created!`)
     setTimeout(() => {props.setNotification('')}, 5000)
     navigate('/anecdotes')
   }
@@ -101,16 +101,16 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input type={content.type} value={content.value} onChange={content.onChange} />
+          <input type={content.noReset.type} value={content.noReset.value} onChange={content.noReset.onChange} />
         </div>
         <div>
           author
           {/* Thanks to attribute spread */}
-          <input {...author} />
+          <input {...author.noReset} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info.noReset} />
         </div>
         <button type="submit">create</button>
         <button onClick={(e) => {

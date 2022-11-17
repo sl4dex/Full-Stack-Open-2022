@@ -1,0 +1,53 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are great",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "custom hook",
+      "id": 3
+    },
+    {
+      "content": "customhooks",
+      "id": 4
+    },
+    {
+      "content": "wtf",
+      "id": 5
+    },
+    {
+      "content": "waat",
+      "id": 6
+    },
+    {
+      "content": "omaga",
+      "id": 7
+    },
+    {
+      "content": "lesgo",
+      "id": 8
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "salva",
+      "number": "092 333",
+      "id": 3
+    }
+  ]
+}
