@@ -1,0 +1,4 @@
+build
+cypress
+.env
+node_mdules
