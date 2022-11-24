@@ -8,12 +8,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { notiLogin, notiHide } from './redux/notificationSlice'
 import { badLogin, errHide } from './redux/errorSlice'
 import { initialBlogs } from './redux/blogSlice'
-import { logIn } from './redux/userSlice'
+import { initialUsers } from './redux/usersSlice'
+import { logIn } from './redux/loggeduserSlice'
+import {
+  BrowserRouter as Router,
+  Routes, Route//, Link
+} from "react-router-dom"
+import Users from './components/Users'
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
-
-
   return <div className='success'>{msg}</div>
 }
 const Error = () => {
@@ -24,16 +28,18 @@ const Error = () => {
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.loggedUser)
+  
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  // const [user, setUser] = useState(null)
 
+  // initial blogs and usersare fetched from the server
   useEffect(() => {
     dispatch(initialBlogs())
+    dispatch(initialUsers())
   }, [])
   // for mantaining session if user refreshes page
   useEffect(() => {
@@ -49,11 +55,10 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
-      
-      dispatch(logIn(user))
       // user is the response from login
-      //setUser(user)
+      const user = await loginService.login({ username, password })
+      dispatch(logIn(user))
+
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
@@ -76,35 +81,42 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Notification />
-      <Error />
-      {user === null || user.length === 0 ? (
-        <LoginForm
-          handleLogin={handleLogin}
-          setUsername={setUsername}
-          setPassword={setPassword}
-          username={username}
-          password={password}
-        />
-      ) : (
-        <div>
-          <p>
-            {user[0].name} logged-in <button onClick={logOut}>logout</button>
-          </p>
-          <BlogForm
-            setNewTitle={setNewTitle}
-            setNewAuthor={setNewAuthor}
-            setNewUrl={setNewUrl}
-            newTitle={newTitle}
-            newAuthor={newAuthor}
-            newUrl={newUrl}
-          />
-        </div>
-      )}
-
-      <BlogList />
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={
+          <div>
+            <Notification />
+            <Error />
+            {user === null || user.length === 0 ? (
+              <LoginForm
+                handleLogin={handleLogin}
+                setUsername={setUsername}
+                setPassword={setPassword}
+                username={username}
+                password={password}
+              />
+            ) : (
+              <div>
+                <p>
+                  {user[0].name} logged-in <button onClick={logOut}>logout</button>
+                </p>
+                <BlogForm
+                  setNewTitle={setNewTitle}
+                  setNewAuthor={setNewAuthor}
+                  setNewUrl={setNewUrl}
+                  newTitle={newTitle}
+                  newAuthor={newAuthor}
+                  newUrl={newUrl}
+                />
+              </div>
+            )}
+      
+            <BlogList />
+          </div>
+        } />
+        <Route path='/users' element={<Users />} />
+      </Routes>
+    </Router>
   )
 }
 
