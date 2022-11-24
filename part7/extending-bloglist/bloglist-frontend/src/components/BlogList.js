@@ -1,9 +1,8 @@
 import React from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import Blog from "./Blog"
 
 const BlogList = ({ user }) => {
-    const dispatch = useDispatch()
     const blogs = useSelector((state) => state.blogs)
 
     return (

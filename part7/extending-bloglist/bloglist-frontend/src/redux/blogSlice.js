@@ -7,10 +7,18 @@ const blogSlice = createSlice({
     reducers: {
         // adds all of the payload to the state (weird syntax, took me a while to figure out)
         setBlogs: (state, action) => action.payload,
+        likeBlog: (state, action) => { 
+            const id = action.payload.id
+            state.map(b => b.id === id ? b.likes++ : b)
+        },
+        delBlog: (state, action) => {
+            const id = action.payload
+            return state.filter(b => b.id !== id)
+        }
     }
 })
 
-export const { setBlogs } = blogSlice.actions
+export const { setBlogs, likeBlog, delBlog } = blogSlice.actions
 export default blogSlice.reducer
 
 export const initialBlogs = () => { 

@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
-import { React, useState } from 'react'
+import React from 'react'
 import Togglable from './Togglable'
 import blogApi from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { notiLiking, notiHide } from '../redux/notificationSlice'
+import { likeBlog, delBlog } from '../redux/blogSlice'
 
 //const Blog = ({ blog, user, blogs, setBlogs }) => {
 const Blog = ({ blog, user }) => {
@@ -17,12 +17,10 @@ const Blog = ({ blog, user }) => {
   }
   const dispatch = useDispatch()
 
-  const [likes, setLikes] = useState(blog.likes)
   // blog in argument is destructured so its a new one, not the same as the one in return
   function updateBlog({ blog }) {
-    blog.likes += 1
     blogApi.update(blog.id, blog)
-    setLikes(blog.likes)
+    dispatch(likeBlog(blog))
     // shows the notification for 3 seconds
     dispatch(notiLiking(blog.title))
     setTimeout(() => {
@@ -32,7 +30,7 @@ const Blog = ({ blog, user }) => {
   async function deleteBlog({ blog }) {
     if (window.confirm(`Remove blog "${blog.title}" by ${blog.author} ?`)) {
       await blogApi.del(blog.id)
-      setBlogs(blogs.filter((b) => b.id !== blog.id))
+      dispatch(delBlog(blog.id))
     }
   }
   return (
@@ -43,7 +41,7 @@ const Blog = ({ blog, user }) => {
       <Togglable buttonLabel='view'>
         <div className='more-details'>
           {blog.url} <br />
-          likes: <span className='likes'>{likes}</span>{' '}
+          likes: <span className='likes'>{blog.likes}</span>{' '}
           <button className='likeBtn' onClick={() => updateBlog({ blog })}>
             like
           </button>
