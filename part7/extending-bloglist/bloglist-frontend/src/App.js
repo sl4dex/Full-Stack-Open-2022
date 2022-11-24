@@ -15,6 +15,7 @@ import {
   Routes, Route//, Link
 } from "react-router-dom"
 import Users from './components/Users'
+import User from './components/User'
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
@@ -82,12 +83,9 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path='/' element={
-          <div>
-            <Notification />
-            <Error />
-            {user === null || user.length === 0 ? (
+      <Notification />
+      <Error />
+      {user === null || user.length === 0 ? (
               <LoginForm
                 handleLogin={handleLogin}
                 setUsername={setUsername}
@@ -98,23 +96,27 @@ const App = () => {
             ) : (
               <div>
                 <p>
-                  {user[0].name} logged-in <button onClick={logOut}>logout</button>
+                  <b>{user[0].name}</b> logged-in <button onClick={logOut}>logout</button>
                 </p>
-                <BlogForm
-                  setNewTitle={setNewTitle}
-                  setNewAuthor={setNewAuthor}
-                  setNewUrl={setNewUrl}
-                  newTitle={newTitle}
-                  newAuthor={newAuthor}
-                  newUrl={newUrl}
-                />
               </div>
-            )}
-      
+            )
+      }
+      <Routes>
+        <Route path='/' element={
+          <div>
+              <BlogForm
+                setNewTitle={setNewTitle}
+                setNewAuthor={setNewAuthor}
+                setNewUrl={setNewUrl}
+                newTitle={newTitle}
+                newAuthor={newAuthor}
+                newUrl={newUrl}
+              />
             <BlogList />
           </div>
         } />
         <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<User />} />
       </Routes>
     </Router>
   )

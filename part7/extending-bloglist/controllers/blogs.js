@@ -29,7 +29,7 @@ blogRouter.post('/', async (request, response, next) => {
     const user = (blog.user = await User.findById(decodedToken.id))
 
     const b = await blog.save()
-    user.blogs = user.blogs.concat(b.id)
+    user.blogs = user.blogs.concat(b._id)
     response.status(201).json(b)
   } catch (exception) {
     next(exception)

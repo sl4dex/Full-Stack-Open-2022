@@ -7,11 +7,10 @@ const userSchema = new mongoose.Schema({
   passwordHash: String,
   blogs: [
     {
-      // mongo doesnt know that that this references blogs, its on mongoose to do that
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Blog',
-    },
-  ],
+      ref: 'Blog'
+    }
+  ]
 })
 
 userSchema.plugin(uniqueValidator)
