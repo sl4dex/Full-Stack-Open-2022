@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { notiLogin, notiHide } from './redux/notificationSlice'
 import { badLogin, errHide } from './redux/errorSlice'
 import { initialBlogs } from './redux/blogSlice'
+import { logIn } from './redux/userSlice'
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
@@ -22,23 +23,25 @@ const Error = () => {
 
 const App = () => {
   const dispatch = useDispatch()
-  // const [blogs, setBlogs] = useState([])
+  const user = useSelector(state => state.loggedUser)
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
 
   useEffect(() => {
     dispatch(initialBlogs())
   }, [])
+  // for mantaining session if user refreshes page
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const storedUser = JSON.parse(loggedUserJSON)
+      blogService.setToken(storedUser.token)
+      dispatch(logIn(storedUser))
     }
   }, [])
 
@@ -47,8 +50,10 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
+      
+      dispatch(logIn(user))
       // user is the response from login
-      setUser(user)
+      //setUser(user)
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
@@ -74,8 +79,7 @@ const App = () => {
     <div>
       <Notification />
       <Error />
-
-      {user === null ? (
+      {user === null || user.length === 0 ? (
         <LoginForm
           handleLogin={handleLogin}
           setUsername={setUsername}
@@ -86,7 +90,7 @@ const App = () => {
       ) : (
         <div>
           <p>
-            {user.name} logged-in <button onClick={logOut}>logout</button>
+            {user[0].name} logged-in <button onClick={logOut}>logout</button>
           </p>
           <BlogForm
             setNewTitle={setNewTitle}
@@ -99,19 +103,7 @@ const App = () => {
         </div>
       )}
 
-      <BlogList user={user} />
-      {/* for all elements of array, if b has more likes than a, then b is sorted before a and viceversa */}
-      {/* {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            blogs={blogs}
-            setBlogs={setBlogs}
-          />
-        ))} */}
+      <BlogList />
     </div>
   )
 }

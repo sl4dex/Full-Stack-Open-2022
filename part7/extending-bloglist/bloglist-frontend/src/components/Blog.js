@@ -6,7 +6,7 @@ import { notiLiking, notiHide } from '../redux/notificationSlice'
 import { likeBlog, delBlog } from '../redux/blogSlice'
 
 //const Blog = ({ blog, user, blogs, setBlogs }) => {
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 5,
@@ -16,6 +16,7 @@ const Blog = ({ blog, user }) => {
     marginBottom: 5,
   }
   const dispatch = useDispatch()
+  const user = useSelector(state => state.loggedUser[0])
 
   // blog in argument is destructured so its a new one, not the same as the one in return
   function updateBlog({ blog }) {
