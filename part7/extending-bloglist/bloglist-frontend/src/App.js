@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
@@ -7,6 +7,7 @@ import BlogForm from './components/BlogForm'
 import { useSelector, useDispatch } from 'react-redux'
 import { notiLogin, notiHide } from './redux/notificationSlice'
 import { badLogin, errHide } from './redux/errorSlice'
+import { initialBlogs } from './redux/blogSlice'
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
@@ -21,7 +22,7 @@ const Error = () => {
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
@@ -29,10 +30,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  // empty array as parameter assures hook only executes when the component
-  // renders for the first time
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    dispatch(initialBlogs())
   }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -100,9 +99,9 @@ const App = () => {
         </div>
       )}
 
-      <h2>Blogs</h2>
+      <BlogList user={user} />
       {/* for all elements of array, if b has more likes than a, then b is sorted before a and viceversa */}
-      {blogs
+      {/* {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
           <Blog
@@ -112,7 +111,7 @@ const App = () => {
             blogs={blogs}
             setBlogs={setBlogs}
           />
-        ))}
+        ))} */}
     </div>
   )
 }

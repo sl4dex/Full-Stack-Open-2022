@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import { React, useState } from 'react'
 import Togglable from './Togglable'
 import blogApi from '../services/blogs'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notiLiking, notiHide } from '../redux/notificationSlice'
 
-const Blog = ({ blog, user, blogs, setBlogs }) => {
+//const Blog = ({ blog, user, blogs, setBlogs }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 5,
@@ -14,7 +16,7 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
     marginBottom: 5,
   }
   const dispatch = useDispatch()
-  
+
   const [likes, setLikes] = useState(blog.likes)
   // blog in argument is destructured so its a new one, not the same as the one in return
   function updateBlog({ blog }) {
