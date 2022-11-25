@@ -9,6 +9,7 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  comments: [String],
 })
 
 // pasar _id a id, luego borrar _id y __v

@@ -34,4 +34,12 @@ const del = (id) => {
   return request.then((response) => response.data)
 }
 
-export default { getAll, setToken, create, update, del }
+const comment = async (id, comment, tok) => {
+  const config = {
+    headers: { Authorization: `bearer ${tok}` },
+  }
+  const resp = await axios.post(`${baseUrl}/${id}/comments`, {comment}, config)
+  return resp.data
+}
+
+export default { getAll, setToken, create, update, del, comment }
