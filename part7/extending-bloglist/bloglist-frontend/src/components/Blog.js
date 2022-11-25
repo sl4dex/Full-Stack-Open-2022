@@ -4,6 +4,7 @@ import blogApi from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { notiLiking, notiHide } from '../redux/notificationSlice'
 import { likeBlog, delBlog } from '../redux/blogSlice'
+import { Link } from 'react-router-dom'
 
 //const Blog = ({ blog, user, blogs, setBlogs }) => {
 const Blog = ({ blog }) => {
@@ -36,9 +37,11 @@ const Blog = ({ blog }) => {
   }
   return (
     <div style={blogStyle}>
-      <div className='initial'>
-        {blog.title} by {blog.author}
-      </div>
+      <Link to={`blogs/${blog.id}`} >
+        <div className='initial'>
+          {blog.title} by {blog.author}
+        </div>
+      </Link>
       <Togglable buttonLabel='view'>
         <div className='more-details'>
           {blog.url} <br />

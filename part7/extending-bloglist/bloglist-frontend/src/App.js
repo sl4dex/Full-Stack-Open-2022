@@ -10,12 +10,14 @@ import { badLogin, errHide } from './redux/errorSlice'
 import { initialBlogs } from './redux/blogSlice'
 import { initialUsers } from './redux/usersSlice'
 import { logIn } from './redux/loggeduserSlice'
-import {
-  BrowserRouter as Router,
-  Routes, Route//, Link
+import {BrowserRouter as Router,
+Routes, Route//, Link
 } from "react-router-dom"
 import Users from './components/Users'
 import User from './components/User'
+import BlogView from './components/BlogView'
+import Nav from './components/Nav'
+
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
@@ -85,22 +87,25 @@ const App = () => {
     <Router>
       <Notification />
       <Error />
-      {user === null || user.length === 0 ? (
-              <LoginForm
-                handleLogin={handleLogin}
-                setUsername={setUsername}
-                setPassword={setPassword}
-                username={username}
-                password={password}
-              />
-            ) : (
-              <div>
-                <p>
-                  <b>{user[0].name}</b> logged-in <button onClick={logOut}>logout</button>
-                </p>
-              </div>
-            )
-      }
+      <div style={{"backgroundColor": "lightgray"}}>
+        <Nav />
+        {user === null || user.length === 0 ? (
+                <LoginForm
+                  handleLogin={handleLogin}
+                  setUsername={setUsername}
+                  setPassword={setPassword}
+                  username={username}
+                  password={password}
+                />
+              ) : (
+                <div>
+                  <p>
+                    <b>{user[0].name}</b> logged-in <button onClick={logOut}>logout</button>
+                  </p>
+                </div>
+              )
+        }
+      </div>
       <Routes>
         <Route path='/' element={
           <div>
@@ -117,6 +122,7 @@ const App = () => {
         } />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User />} />
+        <Route path='/blogs/:id' element={<BlogView />} />
       </Routes>
     </Router>
   )
