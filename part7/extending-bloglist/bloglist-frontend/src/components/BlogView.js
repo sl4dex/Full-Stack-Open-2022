@@ -5,6 +5,7 @@ import { likeBlog } from "../redux/blogSlice"
 import { notiLiking, notiHide } from "../redux/notificationSlice"
 import blogApi from "../services/blogs"
 import Comments from "./Comments"
+import BlogViewDiv from '../styledComponents/BlogView.css'
 
 const BlogView = () => {
     const dispatch = useDispatch()
@@ -25,7 +26,7 @@ const BlogView = () => {
     }
 
     return (
-        <>
+        <BlogViewDiv>
             <h1>{blog.title}</h1>
             <a href={blog.url}>{blog.url}</a> <br />
             {blog.likes} likes <span className='likes'></span>{' '}
@@ -35,7 +36,7 @@ const BlogView = () => {
             <br />
             added by {blog.user.username} <br />
             <Comments blog={blog} />
-        </>
+        </BlogViewDiv>
     )
 }
 

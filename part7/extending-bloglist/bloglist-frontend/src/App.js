@@ -17,15 +17,16 @@ import Users from './components/Users'
 import User from './components/User'
 import BlogView from './components/BlogView'
 import Nav from './components/Nav'
-
+import Html from './styledComponents/Html'
+import NotiDiv from './styledComponents/NotiAndError.css'
 
 const Notification = () => {
   const msg = useSelector(state => state.notification.message)
-  return <div className='success'>{msg}</div>
+  return <NotiDiv className='success'>{msg}</NotiDiv>
 }
 const Error = () => {
   const msg = useSelector(state => state.error.err)
-  return <div className='error'>{msg}</div>
+  return <NotiDiv className='error'>{msg}</NotiDiv>
 }
 
 const App = () => {
@@ -85,6 +86,7 @@ const App = () => {
 
   return (
     <Router>
+      <Html />
       <Notification />
       <Error />
       <div style={{"backgroundColor": "lightgray"}}>

@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { notiCreating } from '../redux/notificationSlice'
+import BlogFormDiv from '../styledComponents/BlogForm.css'
 
 const BlogForm = ({
   setNewTitle,
@@ -27,7 +28,7 @@ const BlogForm = ({
     dispatch(notiCreating({title: newTitle, author: newAuthor}))
   }
   return (
-    <>
+    <BlogFormDiv>
       <div style={hideWhenVisible}>
         <button onClick={() => setblogformVisible(true)}>new blog</button>
       </div>
@@ -44,11 +45,12 @@ const BlogForm = ({
           <div>
             url <input id='url' value={newUrl} onChange={writingUrl} />
           </div>
+          <span></span>
           <button type='submit'>post</button>
         </form>
         <button onClick={() => setblogformVisible(false)}>cancel</button>
       </div>
-    </>
+    </BlogFormDiv>
   )
 }
 

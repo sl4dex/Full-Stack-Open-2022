@@ -2,12 +2,13 @@ import React from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import User from "./User"
+import UsersDiv from "../styledComponents/Users.css"
 
 const Users = () => { 
     const users = useSelector((state) => state.users)
     const blogs = useSelector((state) => state.blogs)
     return (
-        <div>
+        <UsersDiv>
             <h1>Users</h1>
             <table>
                 <thead>
@@ -32,7 +33,7 @@ const Users = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+        </UsersDiv>
     )
 }
 

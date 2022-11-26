@@ -1,6 +1,7 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
+import UserDiv from '../styledComponents/User.css'
 
 const User = () => {
     const id = useParams().id
@@ -12,7 +13,7 @@ const User = () => {
         return null
 
     return(
-        <>
+        <UserDiv>
             <h1>{user.name}</h1>
             <h2>added blogs</h2>
             <ul>
@@ -21,7 +22,7 @@ const User = () => {
                         return <li key={blog.id}>{blog.title}</li>
                 })}
             </ul>
-        </>
+        </UserDiv>
     )
 }
 
